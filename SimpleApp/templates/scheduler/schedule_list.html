@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Schedules{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h2>Schedules</h2>
+    </div>
+    <div class="col text-end">
+        <a href="{% url 'schedule_create' %}" class="btn btn-primary">Add New Schedule</a>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for schedule in schedules %}
+                <tr class="{% if schedule.is_past_due and schedule.status == 'pending' %}table-warning{% elif schedule.status == 'completed' %}table-success{% endif %}">
+                    <td>{{ schedule.title }}</td>
+                    <td>{{ schedule.description|truncatechars:50 }}</td>
+                    <td>{{ schedule.date }}</td>
+                    <td>{{ schedule.time }}</td>
+                    <td>
+                        <span class="badge {% if schedule.status == 'completed' %}bg-success{% elif schedule.status == 'pending' %}bg-warning{% else %}bg-secondary{% endif %}">
+                            {{ schedule.status|title }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <form action="{% url 'schedule_toggle_status' schedule.pk %}" method="post" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-outline-primary">
+                                    {% if schedule.status == 'pending' %}Complete{% else %}Reopen{% endif %}
+                                </button>
+                            </form>
+                            <a href="{% url 'schedule_edit' schedule.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                            <a href="{% url 'schedule_delete' schedule.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">No schedules found. Create one!</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

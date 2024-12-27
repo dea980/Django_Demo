@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% block title %}Chat Room - {{ room_name }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header">
+                <h3>Chat Room: {{ room_name }}</h3>
+            </div>
+            <div class="card-body">
+                <div class="message-container mb-3" id="messageContainer">
+                    {% for message in messages %}
+                    <div class="message mb-2">
+                        <strong>{{ message.user.username }}</strong>
+                        <small class="text-muted">{{ message.timestamp|date:'Y-m-d H:i:s' }}</small>
+                        <div>{{ message.content }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <form id="messageForm" class="message-form">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <input type="text" id="messageInput" class="form-control" placeholder="Type your message...">
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .message-container {
+        height: 400px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column-reverse;
+    }
+    .message {
+        padding: 8px;
+        border-radius: 4px;
+        background-color: #f8f9fa;
+        margin-bottom: 8px;
+    }
+    .message small {
+        margin-left: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const messageContainer = document.getElementById('messageContainer');
+    const messageForm = document.getElementById('messageForm');
+    const messageInput = document.getElementById('messageInput');
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    let lastTimestamp = null;
+
+    // Function to add a new message to the container
+    function addMessage(message) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message mb-2';
+        messageDiv.innerHTML = `
+            <strong>${message.username}</strong>
+            <small class="text-muted">${message.timestamp}</small>
+            <div>${message.content}</div>
+        `;
+        messageContainer.insertBefore(messageDiv, messageContainer.firstChild);
+    }
+
+    // Function to fetch new messages
+    async function fetchMessages() {
+        try {
+            const url = new URL('{% url "get_messages" room_name %}', window.location.origin);
+            if (lastTimestamp) {
+                url.searchParams.append('last_timestamp', lastTimestamp);
+            }
+            
+            const response = await fetch(url);
+            const data = await response.json();
+            
+            if (data.status === 'success' && data.messages.length > 0) {
+                data.messages.forEach(message => {
+                    addMessage(message);
+                });
+                lastTimestamp = data.messages[0].timestamp;
+            }
+        } catch (error) {
+            console.error('Error fetching messages:', error);
+        }
+    }
+
+    // Handle message submission
+    messageForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const content = messageInput.value.trim();
+        if (!content) return;
+        
+        try {
+            const response = await fetch('{% url "send_message" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': csrfToken
+                },
+                body: new URLSearchParams({
+                    content: content,
+                    room: '{{ room_name }}'
+                })
+            });
+            
+            const data = await response.json();
+            if (data.status === 'success') {
+                messageInput.value = '';
+                addMessage(data.message);
+            }
+        } catch (error) {
+            console.error('Error sending message:', error);
+        }
+    });
+
+    // Poll for new messages every 3 seconds
+    setInterval(fetchMessages, 3000);
+    
+    // Initial fetch
+    fetchMessages();
+});
+</script>
+{% endblock %}

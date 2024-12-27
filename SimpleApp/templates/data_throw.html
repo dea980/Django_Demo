@@ -1,0 +1,39 @@
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+		<h1>Data Throw</h1>
+{% endblock content %}
+
+{% block scripts %}
+
+
+<script>
+document.getElementById("myForm").addEventListener("submit", function(event) {
+  event.preventDefault();
+  var name = document.getElementById("name").value;
+  var age = document.getElementById("age").value;
+
+  // Django API로 POST request 전��
+  fetch('/api/data/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      'name': name,
+      'age': age
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log('Success:', data);
+    alert('Data sent successfully!');
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+    alert('Failed to send data!');
+  });
+});
+</script>
