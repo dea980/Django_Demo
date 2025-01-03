@@ -1,3 +1,49 @@
+# SimpleApp 실행 가이드
+
+## 시스템 요구사항
+- Python 3.8 이상
+- pip (Python 패키지 관리자)
+
+## 설치 및 실행 방법
+
+1. 가상환경 생성 및 활성화
+```bash
+python -m venv venv
+# Windows의 경우
+venv\Scripts\activate
+# macOS/Linux의 경우
+source venv/bin/activate
+```
+
+2. 필요한 패키지 설치
+```bash
+pip install django
+```
+
+3. 데이터베이스 마이그레이션
+```bash
+cd SimpleApp
+python manage.py migrate
+```
+
+4. 관리자 계정 생성 (선택사항)
+```bash
+python manage.py createsuperuser
+```
+
+5. 개발 서버 실행
+```bash
+python manage.py runserver
+```
+
+서버가 실행되면 브라우저에서 다음 주소로 접속할 수 있습니다:
+- 메인 페이지: http://127.0.0.1:8000
+- 관리자 페이지: http://127.0.0.1:8000/admin
+
+## 주요 기능
+- 스케줄러: 일정 관리 및 상태 추적
+- 채팅: 실시간 메시지 교환
+
 # SimpleApp API Documentation
 
 ## API 엔드포인트 목록
