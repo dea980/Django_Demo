@@ -26,10 +26,6 @@ urlpatterns = [
     
     # Make scheduler the default page
     path('', include('scheduler.urls')),
-    # poll
-    path('polls/', include('polls.urls')),
-    # admin
-    path('admin/', admin.site.urls),
 ]
 
 if settings.DEBUG:
