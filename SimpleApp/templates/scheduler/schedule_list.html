@@ -21,6 +21,7 @@
                 <th>Date</th>
                 <th>Time</th>
                 <th>Status</th>
+                <th>Chat</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -46,6 +47,11 @@
                             </form>
                             <a href="{% url 'schedule_edit' schedule.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
                             <a href="{% url 'schedule_delete' schedule.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                            {% if schedule.chat_room %}
+                            <a href="{% url 'chat_room' %}?room={{ schedule.chat_room }}" class="btn btn-sm btn-outline-info">
+                                <i class="fas fa-comments"></i> Chat
+                            </a>
+                            {% endif %}
                         </div>
                     </td>
                 </tr>

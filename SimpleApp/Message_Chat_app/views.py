@@ -14,20 +14,20 @@ from .models import ChatMessage
 from django.contrib.auth.models import User
 
 @login_required
-def chat_room(request, room_name='general'):
+def chat_room(request):
     """
     Display the chat room with recent messages.
 
     Renders the chat room template with the 50 most recent messages for the
-    specified room.
+    specified room. Room name can be provided via query parameter.
 
     Args:
         request: The HTTP request object.
-        room_name (str): Name of the chat room (defaults to 'general').
 
     Returns:
         HttpResponse: Rendered chat room template with messages and room information.
     """
+    room_name = request.GET.get('room', 'general')
     messages = ChatMessage.objects.filter(room=room_name).order_by('-timestamp')[:50]
     return render(request, 'chat/chat_room.html', {
         'room_name': room_name,

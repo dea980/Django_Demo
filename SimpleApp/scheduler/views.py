@@ -49,12 +49,13 @@ def schedule_create(request):
             date = datetime.strptime(request.POST['date'], '%Y-%m-%d').date()
             time = datetime.strptime(request.POST['time'], '%H:%M').time()
             
-            Schedule.objects.create(
+            schedule = Schedule.objects.create(
                 title=request.POST['title'],
                 description=request.POST.get('description', ''),
                 date=date,
                 time=time
             )
+            # The chat_room field will be automatically generated in the save method
             messages.success(request, 'Schedule created successfully!')
             return redirect('schedule_list')
         except Exception as e:

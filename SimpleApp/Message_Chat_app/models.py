@@ -1,12 +1,13 @@
 """
-Chat application models.
+체팅을 위한 모델
 
-This module defines the data models for the chat application,
-including the ChatMessage model for storing messages in chat rooms.
+이곳에선 체팅을 위한 데이터 모델을 구성함. 예를 들어 체팅 저장하는것들
+데이터 저장하는 방식 UML 디자인한거 ... 
 """
 
 from django.db import models
 from django.contrib.auth.models import User
+from scheduler.models import Schedule
 
 class ChatMessage(models.Model):
     """
@@ -24,8 +25,19 @@ class ChatMessage(models.Model):
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    room = models.CharField(max_length=100, default='general')
+    schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE, null=True, blank=True)
+    room = models.CharField(max_length=100, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        # If this message is associated with a schedule, use its chat room
+        if self.schedule and not self.room:
+            self.room = self.schedule.chat_room
+        # If no room is specified and no schedule, use 'general'
+        elif not self.room:
+            self.room = 'general'
+        super().save(*args, **kwargs)
     
+    ## 메타 데이터 클래스
     class Meta:
         ordering = ['timestamp']
     

@@ -42,6 +42,13 @@ class Schedule(models.Model):
         choices=STATUS_CHOICES,
         default='pending'
     )
+    chat_room = models.CharField(max_length=100, unique=True, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.chat_room:
+            # Create a unique chat room identifier using the schedule's title and creation time
+            self.chat_room = f"schedule_{self.title.lower().replace(' ', '_')}_{timezone.now().strftime('%Y%m%d%H%M%S')}"
+        super().save(*args, **kwargs)
 
     class Meta:
         ordering = ['date', 'time']
