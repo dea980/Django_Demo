@@ -13,6 +13,8 @@ The default landing page redirects to the scheduler app.
 
 from django.contrib import admin
 from django.urls import path, include
+import mimetypes
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,4 +26,14 @@ urlpatterns = [
     
     # Make scheduler the default page
     path('', include('scheduler.urls')),
+    # poll
+    path('polls/', include('polls.urls')),
+    # admin
+    path('admin/', admin.site.urls),
 ]
+
+if settings.DEBUG:
+    mimetypes.add_type("application/javascript", ".js", True)
+    if "debug_toolbar" in settings.INSTALLED_APPS:
+        import debug_toolbar
+        urlpatterns = [path("__debug__/", include(debug_toolbar.urls))] + urlpatterns
