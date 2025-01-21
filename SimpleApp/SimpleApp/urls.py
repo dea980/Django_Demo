@@ -21,7 +21,10 @@ urlpatterns = [
     path('scheduler/', include('scheduler.urls')),
     path('chat/', include('Message_Chat_app.urls')),
     
-    # Authentication URLs
+    # Custom accounts URLs
+    path('accounts/', include('accounts.urls')),
+    
+    # Authentication URLs (allauth)
     path('accounts/', include('allauth.urls')),
     
     # Make scheduler the default page
