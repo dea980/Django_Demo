@@ -2,3 +2,6 @@
 __pychache__
 .env
 venv
+__pycache__
+__init__.env
+__init__
