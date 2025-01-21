@@ -22,11 +22,13 @@ class ChatMessage(models.Model):
         user (User): Reference to the user who sent the message
         room (str): The chat room identifier where the message was sent
     """
+    ## 웹소켓 chanel s 
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE, null=True, blank=True)
     room = models.CharField(max_length=100, null=True, blank=True)
+    is_ai = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         # If this message is associated with a schedule, use its chat room

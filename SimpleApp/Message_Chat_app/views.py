@@ -10,8 +10,36 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.utils import timezone
+from django.conf import settings
 from .models import ChatMessage
 from django.contrib.auth.models import User
+from openai import OpenAI
+from datetime import timedelta
+
+client = OpenAI(api_key=settings.OPENAI_API_KEY)
+AI_USER = User.objects.get(username='ai_assistant')
+
+def delete_old_messages():
+    """Delete messages older than 30 minutes"""
+    threshold = timezone.now() - timedelta(minutes=30)
+    ChatMessage.objects.filter(timestamp__lt=threshold).delete()
+
+def get_ai_response(message_content):
+    """
+    Get response from ChatGPT API.
+    """
+    try:
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": message_content}
+            ]
+        )
+        return response.choices[0].message.content
+    except Exception as e:
+        print(f"Error getting AI response: {e}")
+        return "Sorry, I'm having trouble processing your request."
 
 @login_required
 def chat_room(request):
@@ -20,6 +48,7 @@ def chat_room(request):
 
     Renders the chat room template with the 50 most recent messages for the
     specified room. Room name can be provided via query parameter.
+    Deletes messages older than 30 minutes.
 
     Args:
         request: The HTTP request object.
@@ -27,6 +56,7 @@ def chat_room(request):
     Returns:
         HttpResponse: Rendered chat room template with messages and room information.
     """
+    delete_old_messages()
     room_name = request.GET.get('room', 'general')
     messages = ChatMessage.objects.filter(room=room_name).order_by('-timestamp')[:50]
     return render(request, 'chat/chat_room.html', {
@@ -53,19 +83,41 @@ def send_message(request):
         room = request.POST.get('room', 'general')
         
         if content:
-            message = ChatMessage.objects.create(
+            # Create user message
+            user_message = ChatMessage.objects.create(
                 content=content,
                 user=request.user,
-                room=room
+                room=room,
+                is_ai=False
+            )
+            
+            # Get AI response
+            ai_response = get_ai_response(content)
+            
+            # Create AI message
+            ai_message = ChatMessage.objects.create(
+                content=ai_response,
+                user=AI_USER,  # Using dedicated AI user
+                room=room,
+                is_ai=True
             )
             
             return JsonResponse({
                 'status': 'success',
-                'message': {
-                    'content': message.content,
-                    'username': message.user.username,
-                    'timestamp': message.timestamp.strftime('%Y-%m-%d %H:%M:%S')
-                }
+                'messages': [
+                    {
+                        'content': user_message.content,
+                        'username': user_message.user.username,
+                        'timestamp': user_message.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
+                        'is_ai': False
+                    },
+                    {
+                        'content': ai_message.content,
+                        'username': 'AI Assistant',
+                        'timestamp': ai_message.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
+                        'is_ai': True
+                    }
+                ]
             })
     
     return JsonResponse({'status': 'error', 'message': 'Invalid request'})

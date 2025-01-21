@@ -17,6 +17,10 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -191,3 +195,6 @@ ACCOUNT_SIGNUP_REDIRECT_URL = '/'  # Where to redirect after signup
 ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/signup/'  # Where to redirect after logout
 ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
+
+# OpenAI settings
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
