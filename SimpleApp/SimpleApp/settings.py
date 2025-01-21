@@ -64,6 +64,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    ## Signe up시에만 Access 할수 있도록 미들웨어 설정
+    'accounts.middleware.SignupRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'SimpleApp.urls'
@@ -181,3 +183,11 @@ ACCOUNT_RATE_LIMITS = {
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
 ACCOUNT_SESSION_REMEMBER = True
+
+# Redirect settings
+LOGIN_URL = '/accounts/signup/'  # Default URL for login_required decorator
+LOGIN_REDIRECT_URL = '/'  # Where to redirect after successful login/signup
+ACCOUNT_SIGNUP_REDIRECT_URL = '/'  # Where to redirect after signup
+ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/signup/'  # Where to redirect after logout
+ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True

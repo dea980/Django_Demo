@@ -12,6 +12,18 @@ class UserProfile(models.Model):
     def __str__(self):
         return f"{self.user.username}'s profile"
 
+"""
+    A decorator for connecting receivers to signals. Used by passing in the
+    signal (or list of signals) and keyword arguments to connect::
+
+        @receiver(post_save, sender=MyModel)
+        def signal_receiver(sender, **kwargs):
+            ...
+
+        @receiver([post_save, post_delete], sender=MyModel)
+        def signals_receiver(sender, **kwargs):
+            ...
+"""
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     """Create a UserProfile instance when a new User is created"""
