@@ -44,122 +44,157 @@ python manage.py runserver
 - 스케줄러: 일정 관리 및 상태 추적
 - 채팅: 실시간 메시지 교환
 
-# SimpleApp API Documentation
+# SimpleApp API 문서
 
-## API 엔드포인트 목록
+## API 개요
+이 문서는 SimpleApp의 API 엔드포인트들에 대한 상세한 설명을 제공합니다. SimpleApp은 크게 스케줄러 API와 메시지 채팅 API로 구성되어 있으며, RESTful 원칙을 따르고 있습니다.
 
-### 스케줄러 API (Scheduler API)
+## API 인증 시스템
+- 스케줄러 API: Django의 세션 기반 인증을 사용합니다. 모든 요청에는 로그인이 필요합니다.
+- 채팅 API: 별도의 인증 없이 사용 가능하며, 채팅방 이름으로 구분됩니다.
 
-#### 1. 스케줄 목록 조회
-- **URL**: `/`
-- **Method**: GET
-- **Description**: 모든 스케줄을 날짜와 시간순으로 정렬하여 조회
-- **Authentication**: 로그인 필요
-- **Response**: 스케줄 목록을 HTML 형식으로 반환
+## 스케줄러 API (Scheduler API)
 
-#### 2. 스케줄 생성
-- **URL**: `/create/`
-- **Method**: POST
-- **Description**: 새로운 스케줄 생성
-- **Authentication**: 로그인 필요
-- **Request Body**:
+### 1. 스케줄 목록 조회
+- **엔드포인트**: `/`
+- **메소드**: GET
+- **설명**: 사용자의 모든 스케줄을 날짜와 시간순으로 정렬하여 보여줍니다.
+- **인증**: 로그인 필수
+- **응답**: HTML 형식의 스케줄 목록 페이지
+- **사용 예시**:
+  ```
+  GET http://127.0.0.1:8000/scheduler/
+  ```
+
+### 2. 스케줄 생성
+- **엔드포인트**: `/create/`
+- **메소드**: POST
+- **설명**: 새로운 일정을 생성합니다. 제목, 설명, 날짜, 시간 정보가 필요합니다.
+- **인증**: 로그인 필수
+- **요청 본문**:
   ```json
   {
-    "title": "스케줄 제목",
-    "description": "스케줄 설명",
-    "date": "YYYY-MM-DD",
-    "time": "HH:MM"
+    "title": "미팅 일정",
+    "description": "팀 회의",
+    "date": "2024-01-21",
+    "time": "14:30"
   }
   ```
-- **Response**: 성공 시 스케줄 목록 페이지로 리다이렉트
+- **응답**: 성공 시 스케줄 목록 페이지로 리다이렉트
 
-#### 3. 스케줄 수정
-- **URL**: `/edit/<int:pk>/`
-- **Method**: POST
-- **Description**: 기존 스케줄 정보 수정
-- **Authentication**: 로그인 필요
-- **Parameters**: 
-  - pk: 스케줄 ID
-- **Request Body**:
+### 3. 스케줄 수정
+- **엔드포인트**: `/edit/<int:pk>/`
+- **메소드**: POST
+- **설명**: 기존 스케줄의 정보를 수정합니다. pk는 스케줄의 고유 식별자입니다.
+- **인증**: 로그인 필수
+- **요청 본문**:
   ```json
   {
-    "title": "수정된 제목",
-    "description": "수정된 설명",
-    "date": "YYYY-MM-DD",
-    "time": "HH:MM",
-    "status": "pending/completed/cancelled"
+    "title": "수정된 미팅 일정",
+    "description": "수정된 팀 회의",
+    "date": "2024-01-22",
+    "time": "15:30",
+    "status": "completed"
   }
   ```
-- **Response**: 성공 시 스케줄 목록 페이지로 리다이렉트
+- **상태 옵션**:
+  - pending: 대기 중
+  - completed: 완료됨
+  - cancelled: 취소됨
 
-#### 4. 스케줄 삭제
-- **URL**: `/delete/<int:pk>/`
-- **Method**: POST
-- **Description**: 스케줄 삭제
-- **Authentication**: 로그인 필요
-- **Parameters**: 
-  - pk: 스케줄 ID
-- **Response**: 성공 시 스케줄 목록 페이지로 리다이렉트
+### 4. 스케줄 삭제
+- **엔드포인트**: `/delete/<int:pk>/`
+- **메소드**: POST
+- **설명**: 특정 스케줄을 삭제합니다. 삭제 후 복구할 수 없습니다.
+- **인증**: 로그인 필수
+- **응답**: 성공 시 스케줄 목록 페이지로 리다이렉트
 
-#### 5. 스케줄 상태 토글
-- **URL**: `/toggle-status/<int:pk>/`
-- **Method**: GET
-- **Description**: 스케줄 상태를 pending ↔ completed 간 전환
-- **Authentication**: 로그인 필요
-- **Parameters**: 
-  - pk: 스케줄 ID
-- **Response**: 스케줄 목록 페이지로 리다이렉트
+### 5. 스케줄 상태 토글
+- **엔드포인트**: `/toggle-status/<int:pk>/`
+- **메소드**: GET
+- **설명**: 스케줄의 상태를 대기중(pending)과 완료(completed) 사이에서 전환합니다.
+- **인증**: 로그인 필수
+- **응답**: 스케줄 목록 페이지로 리다이렉트
 
-### 메시지 채팅 API (Message Chat API)
+## 메시지 채팅 API (Message Chat API)
 
-#### 1. 채팅방 접속
-- **URL**: `/chat/`
-- **Method**: GET
-- **Description**: 기본 채팅방 페이지 접속
-- **Response**: 채팅방 HTML 페이지 반환
+### 1. 채팅방 접속
+- **엔드포인트**: `/chat/`
+- **메소드**: GET
+- **설명**: 기본 채팅방 페이지에 접속합니다.
+- **인증**: 불필요
+- **응답**: 채팅방 HTML 페이지
+- **사용 예시**:
+  ```
+  GET http://127.0.0.1:8000/chat/
+  ```
 
-#### 2. 특정 채팅방 접속
-- **URL**: `/chat/<str:room_name>/`
-- **Method**: GET
-- **Description**: 특정 이름의 채팅방 접속
-- **Parameters**:
+### 2. 특정 채팅방 접속
+- **엔드포인트**: `/chat/<str:room_name>/`
+- **메소드**: GET
+- **설명**: 지정된 이름의 채팅방에 접속합니다. 채팅방이 없는 경우 자동 생성됩니다.
+- **매개변수**:
+  - room_name: 채팅방 이름 (문자열)
+- **응답**: 채팅방 HTML 페이지
+
+### 3. 메시지 전송
+- **엔드포인트**: `/send-message/`
+- **메소드**: POST
+- **설명**: 특정 채팅방에 메시지를 전송합니다.
+- **요청 본문**:
+  ```json
+  {
+    "message": "안녕하세요!",
+    "room_name": "general"
+  }
+  ```
+- **응답**: JSON 형식의 성공/실패 상태
+
+### 4. 전체 메시지 조회
+- **엔드포인트**: `/get-messages/`
+- **메소드**: GET
+- **설명**: 시스템의 모든 채팅 메시지를 조회합니다.
+- **응답**: JSON 형식의 메시지 목록
+
+### 5. 특정 채팅방 메시지 조회
+- **엔드포인트**: `/get-messages/<str:room_name>/`
+- **메소드**: GET
+- **설명**: 특정 채팅방의 메시지 기록만 조회합니다.
+- **매개변수**:
   - room_name: 채팅방 이름
-- **Response**: 채팅방 HTML 페이지 반환
-
-#### 3. 메시지 전송
-- **URL**: `/send-message/`
-- **Method**: POST
-- **Description**: 채팅 메시지 전송
-- **Request Body**:
-  ```json
-  {
-    "message": "메시지 내용",
-    "room_name": "채팅방 이름"
-  }
-  ```
-- **Response**: 성공/실패 상태 반환
-
-#### 4. 전체 메시지 조회
-- **URL**: `/get-messages/`
-- **Method**: GET
-- **Description**: 모든 채팅 메시지 조회
-- **Response**: 메시지 목록 반환
-
-#### 5. 특정 채팅방 메시지 조회
-- **URL**: `/get-messages/<str:room_name>/`
-- **Method**: GET
-- **Description**: 특정 채팅방의 메시지만 조회
-- **Parameters**:
-  - room_name: 채팅방 이름
-- **Response**: 해당 채팅방의 메시지 목록 반환
-
-## 인증 요구사항
-
-- 스케줄러 API의 모든 엔드포인트는 로그인이 필요합니다.
-- 채팅 API는 별도의 인증 없이 사용 가능합니다.
+- **응답**: JSON 형식의 해당 채팅방 메시지 목록
 
 ## 에러 처리
 
-- 모든 API는 적절한 에러 메시지와 함께 실패 상태를 반환합니다.
-- 스케줄러 API는 실패 시 에러 메시지를 포함한 페이지로 리다이렉트됩니다.
-- 채팅 API는 실패 시 에러 상태와 메시지를 JSON 형식으로 반환합니다.
+### 공통 에러 응답
+- **인증 실패**: 401 Unauthorized
+  ```json
+  {
+    "error": "인증이 필요합니다."
+  }
+  ```
+- **권한 없음**: 403 Forbidden
+  ```json
+  {
+    "error": "해당 작업에 대한 권한이 없습니다."
+  }
+  ```
+- **리소스 없음**: 404 Not Found
+  ```json
+  {
+    "error": "요청한 리소스를 찾을 수 없습니다."
+  }
+  ```
+
+### 스케줄러 API 에러
+- 스케줄러 API는 에러 발생 시 에러 메시지와 함께 해당 페이지로 리다이렉트됩니다.
+- 유효성 검사 실패 시 폼 에러 메시지가 표시됩니다.
+
+### 채팅 API 에러
+- 채팅 API는 에러 발생 시 JSON 형식으로 에러 상태와 메시지를 반환합니다.
+- 메시지 전송 실패 시 적절한 에러 메시지가 클라이언트에 전달됩니다.
+
+## 보안 고려사항
+- 모든 스케줄러 API 요청은 CSRF 토큰이 필요합니다.
+- 채팅 메시지는 기본적인 XSS 방지 처리가 되어 있습니다.
+- 민감한 정보는 항상 암호화되어 저장됩니다.
