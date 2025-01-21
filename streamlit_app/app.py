@@ -8,7 +8,7 @@ sys.path.append(project_root)
 sys.path.append(os.path.join(project_root, 'SimpleApp'))
 
 # Set up Django settings before any Django imports
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'SimpleApp.SimpleApp.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'SimpleApp.settings')
 
 # Set up Django
 import django
