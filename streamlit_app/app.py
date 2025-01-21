@@ -1,16 +1,20 @@
-import streamlit as st
-import django
 import os
 import sys
 from datetime import datetime
-from django.utils import timezone
+
+# Add Django project root to Python path first
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# Set up Django settings before any Django imports
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'SimpleApp.SimpleApp.settings')
 
 # Set up Django
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'SimpleApp.settings')
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import django
 django.setup()
 
-# Import Django models
+# Now we can safely import Django-related modules
+import streamlit as st
+from django.utils import timezone
 from Message_Chat_app.models import ChatMessage
 from scheduler.models import Schedule
 from django.contrib.auth.models import User
