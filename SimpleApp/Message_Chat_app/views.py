@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.utils import timezone
 from django.conf import settings
-from .models import ChatMessage
+from Message_Chat_app.models import ChatMessage
 from django.contrib.auth.models import User
 from openai import OpenAI
 from datetime import timedelta
