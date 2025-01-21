@@ -1,5 +1,19 @@
 import streamlit as st
-import requests
+import django
+import os
+import sys
+from datetime import datetime
+from django.utils import timezone
+
+# Set up Django
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'SimpleApp.SimpleApp.settings')
+sys.path.append(os.path.abspath('SimpleApp'))
+django.setup()
+
+# Import Django models
+from Message_Chat_app.models import ChatMessage
+from scheduler.models import Schedule
+from django.contrib.auth.models import User
 
 # Set page config
 st.set_page_config(
@@ -7,6 +21,11 @@ st.set_page_config(
     page_icon="📱",
     layout="wide"
 )
+
+# Initialize session state
+if 'user' not in st.session_state:
+    # For demo purposes, use the first user in the database
+    st.session_state.user = User.objects.first()
 
 # Add title and description
 st.title("Simple Chat & Schedule App")
@@ -22,43 +41,91 @@ if page == "Home":
     st.header("Welcome to Simple App")
     st.write("This is a simple application that helps you manage chats and schedules.")
     
-    # Add some statistics or overview
-    col1, col2 = st.columns(2)
+    # Add real statistics
+    col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.metric(label="Active Chats", value="5")
+        active_chats = ChatMessage.objects.values('room').distinct().count()
+        st.metric(label="Active Chat Rooms", value=active_chats)
     
     with col2:
-        st.metric(label="Upcoming Events", value="3")
+        upcoming_events = Schedule.objects.filter(
+            date__gte=timezone.now().date(),
+            status='pending'
+        ).count()
+        st.metric(label="Upcoming Events", value=upcoming_events)
+    
+    with col3:
+        total_messages = ChatMessage.objects.count()
+        st.metric(label="Total Messages", value=total_messages)
 
 elif page == "Chat":
     st.header("Chat Room")
     
     # Chat room selection
-    room_name = st.text_input("Enter Room Name")
-    if st.button("Join Chat"):
-        if room_name:
-            st.success(f"Joined chat room: {room_name}")
-            
-            # Chat message input
-            message = st.text_input("Type your message")
-            if st.button("Send"):
-                if message:
-                    st.write(f"You: {message}")
+    rooms = (ChatMessage.objects.values_list('room', flat=True)
+             .distinct() or ['general'])
+    room_name = st.selectbox("Select or Enter Room Name", 
+                            list(rooms),
+                            index=0)
+    
+    # Display chat messages
+    messages = ChatMessage.objects.filter(room=room_name).select_related('user')
+    for msg in messages:
+        with st.chat_message(msg.user.username):
+            st.write(f"{msg.timestamp.strftime('%H:%M:%S')} - {msg.content}")
+    
+    # Chat message input
+    message = st.chat_input("Type your message")
+    if message:
+        # Save and display new message
+        new_msg = ChatMessage.objects.create(
+            content=message,
+            user=st.session_state.user,
+            room=room_name
+        )
+        with st.chat_message(st.session_state.user.username):
+            st.write(f"{new_msg.timestamp.strftime('%H:%M:%S')} - {message}")
 
 elif page == "Schedule":
     st.header("Schedule Manager")
     
+    # Display existing schedules
+    st.subheader("Upcoming Schedules")
+    schedules = Schedule.objects.filter(
+        date__gte=timezone.now().date()
+    ).order_by('date', 'time')
+    
+    for schedule in schedules:
+        with st.expander(f"{schedule.title} - {schedule.date} {schedule.time}"):
+            st.write(f"Description: {schedule.description}")
+            st.write(f"Status: {schedule.status}")
+            if st.button(f"Mark Complete {schedule.id}", key=f"complete_{schedule.id}"):
+                schedule.status = 'completed'
+                schedule.save()
+                st.rerun()
+    
     # Add new schedule form
+    st.subheader("Add New Schedule")
     with st.form("new_schedule"):
         title = st.text_input("Event Title")
         date = st.date_input("Event Date")
+        time = st.time_input("Event Time")
         description = st.text_area("Description")
+        status = st.selectbox("Status", ['pending', 'completed', 'cancelled'])
         
         submitted = st.form_submit_button("Add Schedule")
-        if submitted:
+        if submitted and title and date and time:
+            Schedule.objects.create(
+                title=title,
+                description=description,
+                date=date,
+                time=time,
+                status=status
+            )
             st.success(f"Added new schedule: {title}")
+            st.rerun()
 
 # Footer
 st.markdown("---")
-st.markdown("Made with ❤️ using Streamlit")
+st.markdown("Streamlit UI connected to Django backend")
