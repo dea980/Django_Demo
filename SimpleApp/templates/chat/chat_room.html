@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to fetch new messages
     async function fetchMessages() {
         try {
-            const url = new URL('{% url "get_messages" room_name %}', window.location.origin);
+            const url = new URL('{% url "get_messages_with_room" room_name %}', window.location.origin);
             if (lastTimestamp) {
                 url.searchParams.append('last_timestamp', lastTimestamp);
             }
