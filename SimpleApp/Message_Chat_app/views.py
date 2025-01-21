@@ -20,7 +20,11 @@ client = OpenAI(
     api_key=settings.OPENAI_API_KEY,
     base_url="https://api.openai.com/v1"  # Explicitly set the base URL
 )
-AI_USER = User.objects.get(username='ai_assistant')
+# Get or create AI user
+AI_USER, _ = User.objects.get_or_create(
+    username='ai_assistant',
+    defaults={'password': 'ai_password123'}
+)
 
 def delete_old_messages():
     """Delete messages older than 30 minutes"""

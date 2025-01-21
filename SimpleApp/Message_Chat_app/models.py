@@ -22,7 +22,7 @@ class ChatMessage(models.Model):
         user (User): Reference to the user who sent the message
         room (str): The chat room identifier where the message was sent
     """
-    ## 웹소켓 chanel s 
+    ## Channels
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
