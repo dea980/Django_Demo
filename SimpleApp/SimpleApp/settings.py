@@ -215,10 +215,10 @@ ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
 ACCOUNT_SESSION_REMEMBER = True
 
 # Redirect settings
-LOGIN_URL = '/accounts/signup/'  # Default URL for login_required decorator
+LOGIN_URL = '/accounts/login/'  # Default URL for login_required decorator
 LOGIN_REDIRECT_URL = '/'  # Where to redirect after successful login/signup
 ACCOUNT_SIGNUP_REDIRECT_URL = '/'  # Where to redirect after signup
-ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/signup/'  # Where to redirect after logout
+ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'  # Where to redirect after logout
 ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
 
