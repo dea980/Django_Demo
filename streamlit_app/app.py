@@ -6,8 +6,8 @@ from datetime import datetime
 from django.utils import timezone
 
 # Set up Django
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'SimpleApp.SimpleApp.settings')
-sys.path.append(os.path.abspath('SimpleApp'))
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'SimpleApp.settings')
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 django.setup()
 
 # Import Django models
