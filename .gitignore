@@ -1,0 +1,15 @@
+venv
+accounts/.cph
+management/.cph
+accounts/__init__.
+Message_Chat_app/.cph
+Message_Chat_app/__init__.
+schduler/__init__.
+schduler/migration/__init__.
+.env
+streamlit_app/__init__.
+streamlit_app/.cph
+SimpleApp/__init__.
+SimpleApp/static
+SimpleApp/.gitignore
+SimpleApp/db.sqlite3
