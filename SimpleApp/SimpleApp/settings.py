@@ -41,6 +41,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -59,14 +60,23 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    ## SecuritySettingsManager
     'django.middleware.security.SecurityMiddleware',
+    ## DebugToolbar
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    ## SessionMiddleware
     'django.contrib.sessions.middleware.SessionMiddleware',
+    ## CommandManager
     'django.middleware.common.CommonMiddleware',
+    ## csrfMiddleware
     'django.middleware.csrf.CsrfViewMiddleware',
+    ## AuthenticationMiddleware (after csrfMiddleware)
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    ## MessageMiddleware (after AuthenticationMiddleware)
     'django.contrib.messages.middleware.MessageMiddleware',
+    ## X-Frame-OptionsMiddleware
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    ## SocialAccountMiddleware (after X-Frame-OptionsMiddleware)
     'allauth.account.middleware.AccountMiddleware',
     ## Signe up시에만 Access 할수 있도록 미들웨어 설정
     'accounts.middleware.SignupRequiredMiddleware',
@@ -76,20 +86,28 @@ ROOT_URLCONF = 'SimpleApp.urls'
 
 TEMPLATES = [
     {
+        ## Template
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        ## directories
         'DIRS': [BASE_DIR / 'templates'],
+        ## App direcotories
         'APP_DIRS': True,
+        ## Extra context processors
         'OPTIONS': {
             'context_processors': [
+                ## Context processors debugging
                 'django.template.context_processors.debug',
+                ## Context processors request
                 'django.template.context_processors.request',
+                ## Context processors authorization
                 'django.contrib.auth.context_processors.auth',
+                ## Context processors messages
                 'django.contrib.messages.context_processors.messages',
             ],
         },
     },
 ]
-
+## WSGI middleware
 WSGI_APPLICATION = 'SimpleApp.wsgi.application'
 
 
@@ -98,7 +116,9 @@ WSGI_APPLICATION = 'SimpleApp.wsgi.application'
 
 DATABASES = {
     'default': {
+        ## 엔진 : sqlite3
         'ENGINE': 'django.db.backends.sqlite3',
+        ## base path of the database
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
@@ -107,6 +127,7 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
+## Authentication Validation
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -122,6 +143,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+## Interal IP 가 필요 ....  testing  IP settings
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
@@ -143,6 +165,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
