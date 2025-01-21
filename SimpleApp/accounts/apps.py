@@ -6,3 +6,5 @@ class AccountsConfig(AppConfig):
     name = 'accounts'
     verbose_name = 'User Management'
     
+    def ready(self):
+        import accounts.models  # Import the signals
