@@ -16,7 +16,10 @@ from django.contrib.auth.models import User
 from openai import OpenAI
 from datetime import timedelta
 
-client = OpenAI(api_key=settings.OPENAI_API_KEY)
+client = OpenAI(
+    api_key=settings.OPENAI_API_KEY,
+    base_url="https://api.openai.com/v1"  # Explicitly set the base URL
+)
 AI_USER = User.objects.get(username='ai_assistant')
 
 def delete_old_messages():
