@@ -2,8 +2,10 @@ import os
 import sys
 from datetime import datetime
 
-# Add Django project root to Python path first
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Add Django project root and SimpleApp directory to Python path first
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(project_root)
+sys.path.append(os.path.join(project_root, 'SimpleApp'))
 
 # Set up Django settings before any Django imports
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'SimpleApp.SimpleApp.settings')
