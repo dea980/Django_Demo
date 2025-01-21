@@ -27,6 +27,10 @@
                     <form method="post" action="{% url 'update_profile' %}">
                         {% csrf_token %}
                         <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required>
+                        </div>
+                        <div class="mb-3">
                             <label for="bio" class="form-label">Bio</label>
                             <textarea class="form-control" id="bio" name="bio" rows="3">{{ profile.bio }}</textarea>
                         </div>
