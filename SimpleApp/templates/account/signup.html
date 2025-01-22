@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load socialaccount %}
 
 {% block title %}Sign up - SimpleApp{% endblock %}
 
@@ -13,7 +14,16 @@
         
         <div class="card">
             <h1 class="card-title">Sign up</h1>
-            <p class="card-subtitle">Please type your signin information</p>
+            <p class="card-subtitle">Join SimpleApp today</p>
+
+            <a href="{% provider_login_url 'google' %}" class="google-btn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google" class="google-icon">
+                Continue with Google
+            </a>
+
+            <div class="divider">
+                <span>or</span>
+            </div>
 
             <form method="post" action="{% url 'account_signup' %}">
                 {% csrf_token %}
