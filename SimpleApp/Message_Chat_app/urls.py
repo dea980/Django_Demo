@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 # Define your URL patterns here.
-
+# URL~~ 근데 의문은 pattern 을 좀더 다양하게 할수 있는방법이 있나 ..??
 urlpatterns = [
     path('chat/', views.chat_room, name='chat_room'),# chat
     path('chat/<str:room_name>/', views.chat_room, name='chat_room_with_name'), # chat_room_with_name

@@ -15,14 +15,14 @@ from Message_Chat_app.models import ChatMessage
 from django.contrib.auth.models import User
 from openai import OpenAI
 from datetime import timedelta
-
+## TODO: GPT 사용 체팅룸과 엡 만들기~ 
 client = OpenAI(
     api_key=settings.OPENAI_API_KEY,
     base_url="https://api.openai.com/v1"  # Explicitly set the base URL
 )
 # Get or create AI user
 AI_USER, _ = User.objects.get_or_create(
-    username='ai_assistant',
+    username='오늘의 ai_assistant',
     defaults={'password': 'ai_password123'}
 )
 
