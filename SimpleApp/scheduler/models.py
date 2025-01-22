@@ -7,7 +7,7 @@ including the Schedule model for managing calendar events and appointments.
 
 from django.db import models
 from django.utils import timezone
-
+### 망할 스케줄 class 만들기 
 class Schedule(models.Model):
     """
     Schedule model for managing calendar events and appointments.
@@ -76,3 +76,5 @@ class Schedule(models.Model):
             timezone.datetime.combine(self.date, self.time)
         )
         return schedule_datetime < timezone.now()
+    ## TODO : notification def needed Celery using and make it alert based on the time
+    
