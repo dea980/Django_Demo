@@ -4,7 +4,9 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from .models import UserProfile
 from django.http import JsonResponse
-
+## User profile settings~ 아 몰라 그냥 해~ 사진 , bio, 이름~, discription 정도면 되겠지~ 
+## 이름은 에딧팅 되도록 하고 사진도 그렇게~ 그냥 링크인 기능 참고 하나~  그럼 흠.. 
+## 프로필 만들어~  사진 은 없지만 디폴트 만들어나야 나중에 업뎃할때 편알듯?
 @login_required
 def profile(request):
     """
@@ -26,6 +28,7 @@ def profile(request):
         'profile': user_profile
     })
 
+# 프로필 업뎃해~  아 뭐 여기에 걍 에딧팅 가능하게 오픈 시켜놓고 세이브? 
 @login_required
 def update_profile(request):
     """

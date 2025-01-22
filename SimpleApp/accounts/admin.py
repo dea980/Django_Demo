@@ -3,6 +3,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from .models import UserProfile
 
+## USER template variable and attributes~ AH Mola
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False

@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
     'accounts',
     'Message_Chat_app',
     'scheduler',
@@ -75,7 +74,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     ## X-Frame-OptionsMiddleware
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    ## SocialAccountMiddleware (after X-Frame-OptionsMiddleware)
+    ## AccountMiddleware (after X-Frame-OptionsMiddleware)
     'allauth.account.middleware.AccountMiddleware',
     ## Signe up시에만 Access 할수 있도록 미들웨어 설정
     'accounts.middleware.SignupRequiredMiddleware',
@@ -112,7 +111,7 @@ WSGI_APPLICATION = 'SimpleApp.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
+## 나중에 바꿔~ 
 DATABASES = {
     'default': {
         ## 엔진 : sqlite3
@@ -151,6 +150,7 @@ INTERNAL_IPS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
+# 나중에 한영 여기서 바꿀까 ~ 일단 한국어 디폴트~
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Asia/Seoul'
@@ -187,19 +187,6 @@ SITE_ID = 1
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
-
-# Provider specific settings
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE': [
-            'profile',
-            'email',
-        ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        }
-    }
-}
 
 # Additional allauth settings
 ACCOUNT_EMAIL_REQUIRED = True

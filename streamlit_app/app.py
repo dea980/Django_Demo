@@ -1,6 +1,9 @@
 import os
 import sys
 from datetime import datetime
+## FFuuuucccccckckckckckckckckckcck It does not work to design may be might work if I change in to DRF? 
+## why ? fufufufuckvl;aknv;aksdnvlkasdjbvnalksdvnoajsdv
+## this definitly does not work with previosu my worksdkvnas;dvlasdvkjnakjvasdvkjnasdnv;andvadsv 
 
 # Add Django project root and SimpleApp directory to Python path first
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

@@ -1,4 +1,5 @@
 venv
+# 기능별 ~
 accounts/.cph
 management/.cph
 accounts/__init__.
@@ -7,8 +8,10 @@ Message_Chat_app/__init__.
 schduler/__init__.
 schduler/migration/__init__.
 .env
+# 스트림 릿꺼
 streamlit_app/__init__.
-streamlit_app/.cph
+streamlit_app/.
+# simpleapp 꺼
 SimpleApp/__init__.
 SimpleApp/.gitignore
 SimpleApp/db.sqlite3

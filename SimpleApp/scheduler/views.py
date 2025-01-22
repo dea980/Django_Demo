@@ -12,7 +12,7 @@ from django.contrib import messages
 from .models import Schedule
 from django.utils import timezone
 from datetime import datetime
-
+## TODO: support multiple schedules for different 
 @login_required
 def schedule_list(request):
     """
@@ -29,7 +29,7 @@ def schedule_list(request):
         'schedules': schedules,
         'current_datetime': timezone.now()
     })
-
+## create a new schedule
 @login_required
 def schedule_create(request):
     """
@@ -62,7 +62,7 @@ def schedule_create(request):
             messages.error(request, f'Error creating schedule: {str(e)}')
     
     return render(request, 'scheduler/schedule_form.html')
-
+## edting the schedule
 @login_required
 def schedule_edit(request, pk):
     """
@@ -95,8 +95,9 @@ def schedule_edit(request, pk):
             messages.error(request, f'Error updating schedule: {str(e)}')
     
     return render(request, 'scheduler/schedule_form.html', {'schedule': schedule})
-
+# delete the schedule
 @login_required
+## pk = primary key
 def schedule_delete(request, pk):
     """
     Delete an existing schedule entry.
@@ -119,6 +120,7 @@ def schedule_delete(request, pk):
     
     return render(request, 'scheduler/schedule_confirm_delete.html', {'schedule': schedule})
 
+## complete or pending
 @login_required
 def schedule_toggle_status(request, pk):
     """

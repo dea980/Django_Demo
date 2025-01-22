@@ -50,7 +50,7 @@ class Schedule(models.Model):
             self.chat_room = f"schedule_{self.title.lower().replace(' ', '_')}_{timezone.now().strftime('%Y%m%d%H%M%S')}"
         super().save(*args, **kwargs)
 
-    class Meta:
+    class Meta: ## 걍 오더 는 시간 날짜지 나중에 템플릿 바꿀때 사용해야됨~ 
         ordering = ['date', 'time']
 
     def __str__(self):
@@ -77,4 +77,7 @@ class Schedule(models.Model):
         )
         return schedule_datetime < timezone.now()
     ## TODO : notification def needed Celery using and make it alert based on the time
+    ## TODO : notification def needed Celery using and make it alert based on the status
+    ## 하 .... 많아~ 나중에 스케줄 데이터를 프롬트로 한 체팅 모델도 만들어야하는데~
+    
     

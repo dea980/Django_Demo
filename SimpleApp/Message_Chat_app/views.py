@@ -25,12 +25,15 @@ AI_USER, _ = User.objects.get_or_create(
     username='오늘의 ai_assistant',
     defaults={'password': 'ai_password123'}
 )
-
+## 30 분 후면 없어지게 만들어야되니~ 
 def delete_old_messages():
     """Delete messages older than 30 minutes"""
     threshold = timezone.now() - timedelta(minutes=30)
     ChatMessage.objects.filter(timestamp__lt=threshold).delete()
-
+## 근데 GPT response 도 업앨수 있나...? 흠 ... 좀더 생각 해자~
+## Redis 써야되는데~ 허허 REDIS 구축 해야하는데~ 
+# 그렇게 해야 좀 좋을꺼 같은데~ 
+# 앙ㅇㅇ아ㅣ아아아ㅣㅁ어ㅜㅍ마푸마ㅓ품;ㅍ
 def get_ai_response(message_content):
     """
     Get response from ChatGPT API.
