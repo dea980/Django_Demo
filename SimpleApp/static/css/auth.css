@@ -1,0 +1,118 @@
+body {
+    background-color: #ffffff;
+    font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.login-container {
+    max-width: 360px;
+    width: 100%;
+    padding: 30px 20px;
+}
+
+.login-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 16px;
+    position: relative;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #e8e8e8;
+    border-radius: 25px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background-color: #fafafa;
+}
+
+.form-control:focus {
+    border-color: #b388ff;
+    box-shadow: none;
+    background-color: #fff;
+}
+
+.form-control::placeholder {
+    color: #999;
+}
+
+.forgot-password {
+    text-align: right;
+    margin: -8px 0 20px;
+}
+
+.forgot-password a {
+    color: #666;
+    font-size: 13px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.forgot-password a:hover {
+    color: #b388ff;
+}
+
+.btn-login {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 600;
+    margin: 16px 0;
+    background: linear-gradient(to right, #9c27b0, #ba68c8);
+    color: white;
+    transition: opacity 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-login:hover {
+    opacity: 0.9;
+    color: white;
+}
+
+.signup-text {
+    text-align: center;
+    color: #666;
+    font-size: 13px;
+    margin-top: 20px;
+}
+
+.signup-link {
+    display: block;
+    text-align: center;
+    color: #9c27b0;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    margin-top: 8px;
+    text-transform: uppercase;
+}
+
+.signup-link:hover {
+    text-decoration: underline;
+    color: #7b1fa2;
+}
+
+.alert-danger {
+    background-color: #fff3f3;
+    border: none;
+    color: #dc3545;
+    border-radius: 25px;
+    padding: 12px 20px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    text-align: center;
+}

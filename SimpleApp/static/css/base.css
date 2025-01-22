@@ -1,0 +1,12 @@
+.message-container {
+    height: 400px;
+    overflow-y: auto;
+}
+
+.schedule-past {
+    background-color: #f8f9fa;
+}
+
+.schedule-completed {
+    background-color: #d4edda;
+}
