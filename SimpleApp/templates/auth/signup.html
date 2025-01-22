@@ -1,129 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign in - SimpleApp</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f3f2ef;
-            font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'Fira Sans', Ubuntu, Oxygen, 'Oxygen Sans', Cantarell, 'Droid Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Lucida Grande', Helvetica, Arial, sans-serif;
-        }
-        .logo {
-            width: 84px;
-            height: 21px;
-            margin: 24px 0;
-        }
-        .main-container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 24px;
-        }
-        .card {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            padding: 24px;
-            margin-bottom: 24px;
-        }
-        .card-title {
-            font-size: 32px;
-            line-height: 1.25;
-            font-weight: 600;
-            color: rgba(0, 0, 0, 0.9);
-            margin-bottom: 8px;
-        }
-        .card-subtitle {
-            font-size: 14px;
-            line-height: 1.42857;
-            font-weight: 400;
-            color: rgba(0, 0, 0, 0.9);
-            margin-bottom: 24px;
-        }
-        .form-control {
-            border-radius: 4px;
-            border: 1px solid rgba(0, 0, 0, 0.6);
-            height: 48px;
-            padding: 0 16px;
-            font-size: 16px;
-            margin-bottom: 12px;
-        }
-        .form-control:focus {
-            border-color: #0a66c2;
-            box-shadow: 0 0 0 1px #0a66c2;
-        }
-        .btn-primary {
-            background-color: #0a66c2;
-            border: none;
-            border-radius: 24px;
-            font-size: 16px;
-            font-weight: 600;
-            padding: 12px 24px;
-            width: 100%;
-            margin-bottom: 16px;
-        }
-        .btn-primary:hover {
-            background-color: #004182;
-        }
-        .btn-outline {
-            background-color: transparent;
-            border: 1px solid rgba(0, 0, 0, 0.6);
-            border-radius: 24px;
-            color: rgba(0, 0, 0, 0.6);
-            font-size: 16px;
-            font-weight: 600;
-            padding: 12px 24px;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-        .btn-outline:hover {
-            background-color: rgba(0, 0, 0, 0.04);
-            border-color: rgba(0, 0, 0, 0.9);
-            color: rgba(0, 0, 0, 0.9);
-        }
-        .divider {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            margin: 16px 0;
-        }
-        .divider::before,
-        .divider::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-        }
-        .divider span {
-            padding: 0 16px;
-            color: rgba(0, 0, 0, 0.6);
-            font-size: 14px;
-        }
-        .footer-text {
-            text-align: center;
-            font-size: 16px;
-            color: rgba(0, 0, 0, 0.9);
-        }
-        .footer-text a {
-            color: #0a66c2;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        .footer-text a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
+{% load socialaccount %}
+
+{% block title %}Sign up - SimpleApp{% endblock %}
+
+{% block extra_css %}
+<link href="{% static 'css/auth.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
     <div class="main-container">
         <img src="https://www.logo.wine/a/logo/LinkedIn/LinkedIn-Logo.wine.svg" alt="Logo" class="logo">
         
         <div class="card">
-            <h1 class="card-title">Sign in</h1>
+            <h1 class="card-title">Sign up</h1>
             <p class="card-subtitle">Stay updated on your professional world</p>
 
             <form method="post" action="{% url 'account_signup' %}">
@@ -139,12 +29,23 @@
                     </div>
                 {% endif %}
 
-                <input type="text" name="username" class="form-control" placeholder="Username" required>
-                <input type="email" name="email" class="form-control" placeholder="Email or Phone" required>
-                <input type="password" name="password1" class="form-control" placeholder="Password" required>
-                <input type="password" name="password2" class="form-control" placeholder="Confirm Password" required>
+                <div class="form-group">
+                    <input type="text" name="username" class="form-control" placeholder="Username" required autocomplete="username">
+                </div>
 
-                <button type="submit" class="btn btn-primary">Sign in</button>
+                <div class="form-group">
+                    <input type="email" name="email" class="form-control" placeholder="Email" required autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <input type="password" name="password1" class="form-control" placeholder="Password (6+ characters)" required autocomplete="new-password">
+                </div>
+
+                <div class="form-group">
+                    <input type="password" name="password2" class="form-control" placeholder="Confirm password" required autocomplete="new-password">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Sign up</button>
             </form>
 
             <div class="divider">
@@ -153,22 +54,19 @@
 
             <a href="{% provider_login_url 'google' process='signup' %}" class="btn btn-outline">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google" width="20" height="20">
-                Sign in with Google
+                Sign up with Google
             </a>
 
             <button class="btn btn-outline">
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
                     <path d="M16.365 1.43c0 1.14-.493 2.27-1.177 3.08-.744.9-1.99 1.57-2.987 1.57-.12 0-.23-.02-.3-.03-.01-.06-.04-.22-.04-.39 0-1.15.572-2.27 1.206-2.98.804-.94 2.142-1.64 3.248-1.68.03.13.05.28.05.43zm4.565 15.71c-.03.07-.463 1.58-1.518 3.12-.945 1.34-1.94 2.71-3.43 2.71-1.517 0-1.9-.88-3.63-.88-1.698 0-2.302.91-3.67.91-1.377 0-2.332-1.26-3.428-2.8-1.287-1.82-2.323-4.63-2.323-7.28 0-4.28 2.797-6.55 5.552-6.55 1.448 0 2.675.95 3.6.95.865 0 2.222-1.01 3.902-1.01.613 0 2.886.06 4.374 2.19-.13.09-2.383 1.37-2.383 4.19 0 3.26 2.854 4.42 2.955 4.45z"/>
                 </svg>
-                Sign in with Apple
+                Sign up with Apple
             </button>
         </div>
 
         <p class="footer-text">
-            New to SimpleApp? <a href="{% url 'account_signup' %}">Join now</a>
+            Already on SimpleApp? <a href="{% url 'account_login' %}">Sign in</a>
         </p>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+{% endblock %}

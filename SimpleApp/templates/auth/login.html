@@ -1,99 +1,61 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load socialaccount %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Login - SimpleApp{% endblock %}
 
-{% block extra_head %}
-<style>
-    .google-btn {
-        background-color: #fff;
-        color: #757575;
-        border: 1px solid #ddd;
-        padding: 10px 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        transition: background-color 0.3s;
-    }
-    .google-btn:hover {
-        background-color: #f1f1f1;
-        color: #555;
-    }
-    .google-icon {
-        width: 18px;
-        height: 18px;
-    }
-    .or-divider {
-        text-align: center;
-        margin: 20px 0;
-        position: relative;
-    }
-    .or-divider::before,
-    .or-divider::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        width: 45%;
-        height: 1px;
-        background-color: #ddd;
-    }
-    .or-divider::before { left: 0; }
-    .or-divider::after { right: 0; }
-</style>
+{% block extra_css %}
+<link href="{% static 'css/auth.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-6 offset-md-3">
-        <div class="card">
-            <div class="card-body">
-                <h2 class="card-title text-center mb-4">Login</h2>
-                <!-- Social Login Buttons -->
+<div class="main-container">
+    <img src="https://www.logo.wine/a/logo/LinkedIn/LinkedIn-Logo.wine.svg" alt="Logo" class="logo">
+    
+    <div class="card">
+        <h1 class="card-title">Login</h1>
+        <p class="card-subtitle">Welcome back</p>
 
-                <!-- Google Login Button -->
-                <div class="d-grid mb-4">
-                    <a href="{% provider_login_url 'google' %}" class="btn google-btn">
-                        <!--Google autho svg-->
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo" class="google-icon">
-                        Continue with Google
-                    </a>
-                </div>
+        <!-- Google Login Button -->
+        <a href="{% provider_login_url 'google' %}" class="btn google-btn">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo" class="google-icon">
+            Continue with Google
+        </a>
 
-                <div class="or-divider">
-                    <span class="bg-white px-2">OR</span>
-                </div>
-
-                <!-- Traditional Login Form -->
-                <form method="post" action="{% url 'account_login' %}">
-                    {% csrf_token %}
-                    
-                    {% if form.errors %}
-                        <div class="alert alert-danger">
-                            Your email and password didn't match. Please try again.
-                        </div>
-                    {% endif %}
-                    
-                    <div class="mb-3">
-                        <label for="id_login" class="form-label">Email</label>
-                        <input type="email" name="login" class="form-control" id="id_login" required>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="id_password" class="form-label">Password</label>
-                        <input type="password" name="password" class="form-control" id="id_password" required>
-                    </div>
-                    
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">Login</button>
-                    </div>
-                </form>
-
-                <div class="text-center mt-3">
-                    <a href="{% url 'account_signup' %}">Don't have an account? Sign up</a>
-                </div>
-            </div>
+        <div class="or-divider">
+            <span>OR</span>
         </div>
+
+        <!-- Traditional Login Form -->
+        <form method="post" action="{% url 'account_login' %}">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    Your email and password didn't match. Please try again.
+                </div>
+            {% endif %}
+            
+            <div class="form-group">
+                <label for="id_login" class="form-label">Email</label>
+                <input type="email" name="login" class="form-control" id="id_login" required autocomplete="email">
+            </div>
+            
+            <div class="form-group">
+                <label for="id_password" class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" id="id_password" required autocomplete="current-password">
+            </div>
+
+            <div class="forgot-password">
+                <a href="{% url 'account_reset_password' %}">Forgot password?</a>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
     </div>
+
+    <p class="footer-text">
+        New to SimpleApp? <a href="{% url 'account_signup' %}">Join now</a>
+    </p>
 </div>
 {% endblock %}
