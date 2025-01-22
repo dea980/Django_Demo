@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load socialaccount %}
-<!-- Damn always have somtehing to design~ hopefully this design does not affect when I change into DRF-->
+
 {% block title %}Login - SimpleApp{% endblock %}
 
 {% block extra_css %}
@@ -15,16 +14,6 @@
     <div class="card">
         <h1 class="card-title">Login</h1>
         <p class="card-subtitle">Welcome back</p>
-
-        <!-- Google Login Button -->
-        <a href="{% provider_login_url 'google' %}" class="btn google-btn">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo" class="google-icon">
-            Continue with Google
-        </a>
-
-        <div class="or-divider">
-            <span>OR</span>
-        </div>
 
         <!-- Traditional Login Form -->
         <form method="post" action="{% url 'account_login' %}">

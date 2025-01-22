@@ -1,9 +1,7 @@
 {% extends 'base.html' %}
-{% comment %} 난 html이 싫어진다~ 왜 preview 는 안돼서 고생시키냐~ IDE에 세로 툴까는거 시러~  {% endcomment %}
-{% comment %} 이건 좀 신기 ~ {% %} 문법  약간 CPP 같던데~ 나이슨가 ? {% endcomment %}
 
 {% block title %}Chat Room - {{ room_name }}{% endblock %}
-    
+
 {% block content %}
 <div class="row">
     <div class="col-md-8 offset-md-2">
@@ -11,6 +9,7 @@
             <div class="card-header">
                 <h3>Chat Room: {{ room_name }}</h3>
             </div>
+            
             <div class="card-body">
                 <div class="message-container mb-3" id="messageContainer">
                     {% for message in messages %}
