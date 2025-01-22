@@ -119,9 +119,10 @@
         
         <div class="card">
             <h1 class="card-title">Sign up</h1>
-            <p class="card-subtitle">Make the most of your professional life</p>
+            <p class="card-subtitle">Please type your signin information</p>
 
             <form method="post" action="{% url 'account_signup' %}">
+                {% comment %} TODO sign in form 만들기 ...  {% endcomment %}
                 {% csrf_token %}
                 
                 {% if form.errors %}

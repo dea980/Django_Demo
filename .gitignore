@@ -13,3 +13,8 @@ SimpleApp/__init__.
 SimpleApp/static
 SimpleApp/.gitignore
 SimpleApp/db.sqlite3
+.DS_store
+
+__pycache__
+__init__.env
+__init____pycache__/
