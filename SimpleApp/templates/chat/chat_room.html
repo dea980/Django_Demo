@@ -138,9 +138,15 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
             if (data.status === 'success') {
                 messageInput.value = '';
-                data.messages.forEach(message => {
-                    addMessage(message);
-                });
+                // Only add the user's message immediately
+                const userMessage = data.messages.find(m => !m.is_ai);
+                if (userMessage) {
+                    addMessage(userMessage);
+                }
+                // Set lastTimestamp to trigger fetch for AI response
+                if (data.messages.length > 0) {
+                    lastTimestamp = data.messages[0].timestamp;
+                }
             }
         } catch (error) {
             console.error('Error sending message:', error);
