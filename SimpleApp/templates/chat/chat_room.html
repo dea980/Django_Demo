@@ -51,14 +51,16 @@
     .message small {
         margin-left: 10px;
     }
-    .ai-message {
-        background-color: #e3f2fd;
-        margin-right: auto;
-        border-right: 3px solid #2196f3;
-    }
-    .message:not(.ai-message) {
+    .message {
         margin-left: auto;
         border-left: 3px solid #6c757d;
+    }
+    .ai-message {
+        margin-left: 0 !important;
+        margin-right: auto !important;
+        border-left: none;
+        border-right: 3px solid #2196f3;
+        background-color: #e3f2fd;
     }
 </style>
 {% endblock %}
