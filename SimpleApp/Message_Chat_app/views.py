@@ -18,11 +18,11 @@ from datetime import timedelta
 ## TODO: GPT 사용 체팅룸과 엡 만들기~ 
 client = OpenAI(
     api_key=settings.OPENAI_API_KEY,
-    base_url="https://api.openai.com/v1"  # Explicitly set the base URL
+    ## base_url="https://api.openai.com/v1"  # Explicitly set the base URL
 )
 # Get or create AI user
 AI_USER, _ = User.objects.get_or_create(
-    username='오늘의 ai_assistant',
+    username='오늘의 AI_assistant',
     defaults={'password': 'ai_password123'}
 )
 ## 30 분 후면 없어지게 만들어야되니~ 
