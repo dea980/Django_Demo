@@ -90,6 +90,15 @@ document.addEventListener('DOMContentLoaded', function() {
             const url = new URL('{% url "get_messages_with_room" room_name %}', window.location.origin);
             if (lastTimestamp) {
                 url.searchParams.append('last_timestamp', lastTimestamp);
+            } else {
+                // Skip initial fetch if we already have messages from template
+                const existingMessages = messageContainer.getElementsByClassName('message');
+                if (existingMessages.length > 0) {
+                    const lastMessage = existingMessages[0];
+                    const timestamp = lastMessage.querySelector('small').textContent;
+                    lastTimestamp = timestamp;
+                    return;
+                }
             }
             
             const response = await fetch(url);
