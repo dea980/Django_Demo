@@ -26,3 +26,5 @@ accounts/migrations
 accounts/management
 Message_Chat_app/migrations
 schduler/migrations
+# virtual environment
+Djangoenv
